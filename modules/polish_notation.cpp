@@ -55,7 +55,6 @@ void Calculator::operators_case(int *check_negative_func) {
   std::stack<Lexem> tmp = input_;
   tmp.pop();
   type_t val = tmp.top().value_type;
-  Lexem sup = support_.top();
   if (is_func(input_.top().value_type) &&
       (val == MUL || val == SUB || val == MOD || val == EXP || is_func(val))) {
     error = EXIT_FAILURE;
@@ -67,10 +66,11 @@ void Calculator::operators_case(int *check_negative_func) {
     *check_negative_func = 0;
   }
   while (!*check_negative_func && !support_.empty() &&
-         sup.priority >= input_.top().priority) {
+         support_.top().priority >= input_.top().priority) {
     // push_stack(p->value, p->priority, p->value_type, output);
     // pop_stack(support);
-    output_.push({sup.value, sup.priority, sup.value_type});
+    output_.push({support_.top().value, support_.top().priority,
+                  support_.top().value_type});
   }
   if (!error) {
     // push_stack(input->value, input->priority, input->value_type, support);
@@ -112,6 +112,7 @@ int Calculator::to_reverse_polish_notation() {
                   support_.top().value_type});
     support_.pop();
   }
+  reverse_stack(output_);
   // if (support) destroy_stack(support);
   return error;
 }
