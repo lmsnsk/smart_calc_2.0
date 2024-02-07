@@ -47,7 +47,7 @@ void Calculator::close_bracket_case() {
       support_.pop();
     }
     // pop_stack(support);
-    support_.pop();
+    if (!support_.empty()) support_.pop();
   }
 }
 
@@ -71,6 +71,7 @@ void Calculator::operators_case(int *check_negative_func) {
     // pop_stack(support);
     output_.push({support_.top().value, support_.top().priority,
                   support_.top().value_type});
+    support_.pop();
   }
   if (!error) {
     // push_stack(input->value, input->priority, input->value_type, support);
@@ -82,7 +83,7 @@ void Calculator::operators_case(int *check_negative_func) {
 int Calculator::to_reverse_polish_notation() {
   std::stack<Lexem> input_tmp = input_;
   input_tmp.pop();
-  if (input_.top().priority > 0 && !input_tmp.empty()) return EXIT_FAILURE;
+  if (input_.top().priority > 0 && input_tmp.empty()) return EXIT_FAILURE;
 
   int check_negative_func = 0;
 
@@ -119,24 +120,24 @@ int Calculator::to_reverse_polish_notation() {
 
 }  // namespace s21
 
-int main(void) {
-  s21::Calculator calc;
-  std::string str = "3+2";
-  int er = calc.parcer(str);
-  if (!er) er = calc.to_reverse_polish_notation();
-  if (er) {
-    printf("Error\n");
-  } else {
-    while (!calc.input_.empty()) {
-      std::cout << calc.input_.top().value << " ";
-      calc.input_.pop();
-    }
-    std::cout << std::endl;
+// int main(void) {
+//   s21::Calculator calc;
+//   std::string str = "3+2";
+//   int er = calc.parcer(str);
+//   if (!er) er = calc.to_reverse_polish_notation();
+//   if (er) {
+//     printf("Error\n");
+//   } else {
+//     while (!calc.input_.empty()) {
+//       std::cout << calc.input_.top().value << " ";
+//       calc.input_.pop();
+//     }
+//     std::cout << std::endl;
 
-    while (!calc.output_.empty()) {
-      std::cout << calc.output_.top().value << std::endl;
-      calc.output_.pop();
-    }
-  }
-  return 0;
-}
+//     while (!calc.output_.empty()) {
+//       std::cout << calc.output_.top().value << std::endl;
+//       calc.output_.pop();
+//     }
+//   }
+//   return 0;
+// }

@@ -1,8 +1,8 @@
 #include "../s21_smart_calc.h"
 
-int deposit_calc(double deposit, int term, double rate, double nalog_rate,
-                 int payout, int capitalization, Change plus, Change minus,
-                 double *percent, double *nalog, double *result) {
+namespace s21 {
+
+int Deposit_calc::deposit_calc(double *percent, double *nalog, double *result) {
   if (!deposit || !term) return EXIT_FAILURE;
   *nalog = 0;
   *result = deposit;
@@ -45,3 +45,5 @@ int deposit_calc(double deposit, int term, double rate, double nalog_rate,
   }
   return error;
 }
+
+}  // namespace s21

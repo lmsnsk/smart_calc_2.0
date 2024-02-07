@@ -1,20 +1,18 @@
 #include "s21_smart_calc.h"
 
 namespace s21 {
-int s21_smart_calc(char* str, double* result, char* x_str) {
+
+int Calculator::s21_smart_calc(std::string str, double* result, std::string x) {
   Lexem* input_stack = {0};
   Lexem* output_stack = {0};
   Lexem* numbers = {0};
 
   int er = validator(str);
-  if (!er) er = parcer(&input_stack, str);
-  if (!er) er = to_reverse_polish_notation(input_stack, &output_stack);
-  if (!er) er = calculation(output_stack, &numbers, x_str);
-  if (!er) *result = numbers->value;
+  if (!er) er = parcer(str);
+  if (!er) er = to_reverse_polish_notation();
+  if (!er) er = calculation(x);
+  if (!er) *result = numbers_.top().value;
 
-  if (input_stack) destroy_stack(input_stack);
-  if (output_stack) destroy_stack(output_stack);
-  if (numbers) destroy_stack(numbers);
   return er;
 }
 

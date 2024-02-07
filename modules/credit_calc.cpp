@@ -1,8 +1,9 @@
 #include "../s21_smart_calc.h"
 
-void credit_calc(double amount, double rate_percent, int time, int type,
-                 double *pay, double *total_pay, double *overpay,
-                 double *first_pay) {
+namespace s21 {
+
+void Credit_calc::credit_calc(double *pay, double *total_pay, double *overpay,
+                              double *first_pay) {
   double rate_m = rate_percent * 0.01 / 12.0;
 
   if (type == 1 && amount > 0) {
@@ -26,3 +27,5 @@ void credit_calc(double amount, double rate_percent, int time, int type,
   }
   *overpay = *total_pay - amount;
 }
+
+}  // namespace s21

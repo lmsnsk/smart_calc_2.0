@@ -1,7 +1,5 @@
-// #include <math.h>
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
+#ifndef S21_SMART_CALC
+#define S21_SMART_CALC
 
 #include <cmath>
 #include <iostream>
@@ -60,18 +58,14 @@ class Calculator {
   int validator(std::string& str);
   int parcer(std::string str);
   int to_reverse_polish_notation();
-  int calculation(Lexem* input, Lexem** numbers, char* x);
-  void credit_calc(double amount, double rate_percent, int time, int type,
-                   double* pay, double* total_pay, double* overpay,
-                   double* first_pay);
-  int deposit_calc(double deposit, int term, double rate, double nalog_rate,
-                   int payout, int capitalization, Change plus, Change minus,
-                   double* percent, double* nalog, double* result);
+  int calculation(std::string x);
+  int s21_smart_calc(std::string str, double* result, std::string x);
+
+ private:
   std::stack<Lexem> input_;
   std::stack<Lexem> output_;
   std::stack<Lexem> support_;
-
- private:
+  std::stack<Lexem> numbers_;
   Lexem first;
   int check_first_{};
   void get_first();
@@ -91,6 +85,41 @@ class Calculator {
   void open_bracket_case();
   void close_bracket_case();
   void operators_case(int* check_negative_func);
+  void execution_un_operator(type_t type);
+  void execution_bin_operator(type_t type);
+};
+
+class Credit_calc {
+ public:
+  int time;
+  int type;
+  double amount;
+  double rate_percent;
+
+  Credit_calc() noexcept {};
+  ~Credit_calc() noexcept {};
+
+  void credit_calc(double* pay, double* total_pay, double* overpay,
+                   double* first_pay);
+};
+
+class Deposit_calc {
+ public:
+  int term;
+  int payout;
+  int capitalization;
+  double rate;
+  double deposit;
+  double nalog_rate;
+  Change plus;
+  Change minus;
+
+  Deposit_calc() noexcept {};
+  ~Deposit_calc() noexcept {};
+
+  int deposit_calc(double* percent, double* nalog, double* result);
 };
 
 }  // namespace s21
+
+#endif  // S21_SMART_CALC
