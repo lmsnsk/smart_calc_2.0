@@ -1,9 +1,10 @@
 #include "s21_smart_calc.h"
 
+namespace s21 {
 int s21_smart_calc(char* str, double* result, char* x_str) {
-  List* input_stack = {0};
-  List* output_stack = {0};
-  List* numbers = {0};
+  Lexem* input_stack = {0};
+  Lexem* output_stack = {0};
+  Lexem* numbers = {0};
 
   int er = validator(str);
   if (!er) er = parcer(&input_stack, str);
@@ -16,3 +17,5 @@ int s21_smart_calc(char* str, double* result, char* x_str) {
   if (numbers) destroy_stack(numbers);
   return er;
 }
+
+}  // namespace s21
