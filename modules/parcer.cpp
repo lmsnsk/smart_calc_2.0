@@ -7,16 +7,12 @@ void Calculator::parse_3_char_oper(std::string str, int* i, type_t type,
   if (str[*i + 1] == c1 && str[*i + 2] == c2) {
     if (c1 == 'o' && c2 == 'd') {
       input_.push({0.0, 2, type});
-      // push_stack(0.0, 2, type, main_stack);
     } else if (str[*i] == 'n' && c1 == 'a' && c2 == 'n') {
       input_.push({NAN, 0, type});
-      // push_stack(NAN, 0, type, main_stack);
     } else if (str[*i] == 'i' && c1 == 'n' && c2 == 'f') {
       input_.push({INFINITY, 0, type});
-      // push_stack(INFINITY, 0, type, main_stack);
     } else {
       input_.push({0.0, 3, type});
-      // push_stack(0.0, 3, type, main_stack);
     }
     *i += 2;
   } else
@@ -27,7 +23,6 @@ void Calculator::parse_4_char_oper(std::string str, int* i, type_t type,
                                    char c1, char c2, char c3) {
   if (str[*i + 1] == c1 && str[*i + 2] == c2 && str[*i + 3] == c3) {
     input_.push({0.0, 3, type});
-    // push_stack(0.0, 3, type, main_stack);
     *i += 3;
   } else
     error = EXIT_FAILURE;
@@ -60,8 +55,6 @@ void Calculator::plus_minus(std::string str, int i, int is_minus) {
     input_.push({0.0, 1, (is_minus ? MINUS : PLUS)});
   else
     input_.push({0.0, 5, (is_minus ? U_MINUS : U_PLUS)});
-  // push_stack(0.0, 1, (is_minus ? MINUS : PLUS), list);
-  // push_stack(0.0, 5, (is_minus ? U_MINUS : U_PLUS), list);
 }
 
 // input_.push({0.0, 3, LN});
@@ -70,11 +63,9 @@ void Calculator::parser_switch(std::string str, int* i) {
   switch (str[*i]) {
     case '(':
       input_.push({0.0, -1, O_BRACKET});
-      // push_stack(0.0, -1, O_BRACKET, list);
       break;
     case ')':
       input_.push({0.0, -1, C_BRACKET});
-      // push_stack(0.0, -1, C_BRACKET, list);
       break;
     case '+':
       plus_minus(str, *i, 0);
@@ -84,15 +75,12 @@ void Calculator::parser_switch(std::string str, int* i) {
       break;
     case '*':
       input_.push({0.0, 2, MUL});
-      // push_stack(0.0, 2, MUL, list);
       break;
     case '/':
       input_.push({0.0, 2, SUB});
-      // push_stack(0.0, 2, SUB, list);
       break;
     case '^':
       input_.push({0.0, 4, EXP});
-      // push_stack(0.0, 4, EXP, list);
       break;
     case 'i':
       parse_3_char_oper(str, i, NUM_INF, 'n', 'f');
@@ -132,7 +120,6 @@ void Calculator::parser_switch(std::string str, int* i) {
         parse_3_char_oper(str, i, LOG, 'o', 'g');
       } else if (str[*i + 1] == 'n') {
         input_.push({0.0, 3, LN});
-        // push_stack(0.0, 3, LN, list);
         (*i)++;
       } else
         error = EXIT_FAILURE;
@@ -150,11 +137,13 @@ void Calculator::get_first() {
   }
 }
 
-void Calculator::reverse_stack(std::stack<Lexem>& in, std::stack<Lexem>& out) {
+void Calculator::reverse_stack(std::stack<Lexem>& in) {
+  std::stack<Lexem> rev;
   while (!in.empty()) {
-    out.push(in.top());
+    rev.push(in.top());
     in.pop();
   }
+  in = rev;
 }
 
 int Calculator::parcer(std::string str) {
@@ -164,20 +153,17 @@ int Calculator::parcer(std::string str) {
       if (str[i] == 'x') {
         if (str[i + 1] == 'x') this->error = EXIT_FAILURE;
         input_.push({0.0, 0, NUM_X});
-        // push_stack(0.0, 0, NUM_X, list);
         i++;
       } else {
         double num;
         num = parse_number(str, &i);
         input_.push({num, 0, NUMBER});
-        // push_stack(num, 0, NUMBER, list);
       }
       get_first();
       if (str[i] == '(' || str[i] == 'x' || str[i] == 'c' || str[i] == 's' ||
           str[i] == 'a' || str[i] == 't' || str[i] == 'l') {
         input_.push({0.0, 2, MUL});
         get_first();
-        // push_stack(0.0, 2, MUL, list);
       }
       continue;
     }
@@ -186,13 +172,12 @@ int Calculator::parcer(std::string str) {
     i++;
   }
   Lexem top = input_.top();
-  // List* p = peek_stack(*list);
-  // List* tmp = *list;
   if (!error &&
       (top.priority > 0 || first.value_type == MUL || first.value_type == SUB ||
        first.value_type == MOD || first.value_type == EXP)) {
     error = EXIT_FAILURE;
   }
+  reverse_stack(input_);
   return error;
 }
 
@@ -200,16 +185,14 @@ int Calculator::parcer(std::string str) {
 
 // int main(void) {
 //   s21::Calculator calc;
-//   std::string str = "*3+2";
+//   std::string str = "3+2";
 //   int er = calc.parcer(str);
-//   std::stack<s21::Lexem> rev_input;
-//   calc.reverse_stack(calc.input_, rev_input);
 //   if (er) {
 //     printf("Error\n");
 //   } else {
-//     while (!rev_input.empty()) {
-//       std::cout << rev_input.top().value << std::endl;
-//       rev_input.pop();
+//     while (!calc.input_.empty()) {
+//       std::cout << calc.input_.top().value << std::endl;
+//       calc.input_.pop();
 //     }
 //   }
 //   return 0;

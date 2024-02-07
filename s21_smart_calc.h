@@ -59,7 +59,7 @@ class Calculator {
 
   int validator(std::string& str);
   int parcer(std::string str);
-  int to_reverse_polish_notation(Lexem* input_stack, Lexem** output_stack);
+  int to_reverse_polish_notation();
   int calculation(Lexem* input, Lexem** numbers, char* x);
   void credit_calc(double amount, double rate_percent, int time, int type,
                    double* pay, double* total_pay, double* overpay,
@@ -67,26 +67,30 @@ class Calculator {
   int deposit_calc(double deposit, int term, double rate, double nalog_rate,
                    int payout, int capitalization, Change plus, Change minus,
                    double* percent, double* nalog, double* result);
-  std::stack<Lexem> input_;                                           //
-  void reverse_stack(std::stack<Lexem>& in, std::stack<Lexem>& out);  //
+  std::stack<Lexem> input_;
+  std::stack<Lexem> output_;
+  std::stack<Lexem> support_;
 
  private:
   Lexem first;
   int check_first_{};
-  std::stack<Lexem> output_;
   void get_first();
+  bool is_func(int val);
   bool is_number(char c);
-  int is_func(int val);
   bool is_arithmetic(char c);
+  bool is_binar_operator(int val);
   int delete_speces(std::string& str);
   double parse_number(std::string str, int* i);
   void parser_switch(std::string str, int* i);
   void plus_minus(std::string str, int i, int is_minus);
+  void reverse_stack(std::stack<Lexem>& in);
   void parse_3_char_oper(std::string str, int* i, type_t type, char c1,
                          char c2);
   void parse_4_char_oper(std::string str, int* i, type_t type, char c1, char c2,
                          char c3);
-  int is_binar_operator(int val);
+  void open_bracket_case();
+  void close_bracket_case();
+  void operators_case(int* check_negative_func);
 };
 
 }  // namespace s21
