@@ -182,18 +182,3 @@ int Calculator::parcer(std::string str) {
 }
 
 }  // namespace s21
-
-// int main(void) {
-//   s21::Calculator calc;
-//   std::string str = "3+2";
-//   int er = calc.parcer(str);
-//   if (er) {
-//     printf("Error\n");
-//   } else {
-//     while (!calc.input_.empty()) {
-//       std::cout << calc.input_.top().value << std::endl;
-//       calc.input_.pop();
-//     }
-//   }
-//   return 0;
-// }

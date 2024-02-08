@@ -47,7 +47,7 @@ uninstall:
 dist:
 	mkdir dist
 	mkdir dist/src
-	cp -r gui/ tests/ modules/ Makefile *.c *.h *.html dist/src/
+	cp -r gui/ tests/ modules/ Makefile *.cpp *.h *.html dist/src/
 	cd ./dist && tar cvzf $(TARGET)_v1.0.tgz *
 	rm -rf dist/src/
 
@@ -55,16 +55,16 @@ dvi:
 	$(OPEN_CMD) s21_smart_calc.html
 
 test: 
-	$(CC) $(FILETEST).c *.c $(MODULES).c -o $(FILETESTO) $(TESTFLAGS)
+	$(CC) $(FILETEST).cpp *.cpp $(MODULES).cpp -o $(FILETESTO) $(TESTFLAGS)
 	./$(FILETESTO)
 
 test_val: 
-	$(CC) $(FILETEST).c *.c $(MODULES).c -o $(FILETESTO) $(TESTFLAGS)
+	$(CC) $(FILETEST).cpp *.cpp $(MODULES).cpp -o $(FILETESTO) $(TESTFLAGS)
 	valgrind --tool=memcheck --log-file="valgrind_check.log" --leak-check=yes \
 	--track-origins=yes -s ./$(FILETESTO)
 
 gcov_report:
-	$(CC) $(COVFLAG) $(FILETEST).c *.c $(MODULES).c -o $(FILEREPORT) $(TESTFLAGS)
+	$(CC) $(COVFLAG) $(FILETEST).cpp *.cpp $(MODULES).cpp -o $(FILEREPORT) $(TESTFLAGS)
 	./$(FILEREPORT)
 	lcov -t "$(FILE)" -o test.info -c -d .  
 	genhtml -o $(DIRREPORT) test.info
@@ -78,11 +78,11 @@ clean:
 
 #style
 cpp:
-	cppcheck --enable=all --suppress=missingIncludeSystem *.c *.h $(MODULES).c
+	cppcheck --enable=all --suppress=missingIncludeSystem *.cpp *.h $(MODULES).cpp
 
 clang:
 	cp ../materials/linters/.clang-format .clang-format
-	clang-format -n *.c *.h $(MODULES).c
+	clang-format -n *.cpp *.h $(MODULES).cpp
 	rm -rf .clang-format
 
 check: cpp clang

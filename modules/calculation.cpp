@@ -73,12 +73,11 @@ int Calculator::calculation(std::string x) {
     Lexem out = output_.top();
     if (out.value_type == NUMBER || out.value_type == NUM_INF ||
         out.value_type == NUM_NAN) {
-      // push_stack(out.value, out.priority, out.value_type, numbers);
       numbers_.push({out.value, out.priority, out.value_type});
 
     } else if (out.value_type == NUM_X) {
-      double num = std::stod(x);
-      // push_stack(num, out.priority, out.value_type, numbers);
+      double num{};
+      num = !x.empty() ? std::stod(x) : 0;
       numbers_.push({num, out.priority, out.value_type});
 
     } else if (is_func(out.value_type) || out.value_type == U_MINUS) {
@@ -96,31 +95,3 @@ int Calculator::calculation(std::string x) {
 }
 
 }  // namespace s21
-
-int main(void) {
-  s21::Calculator calc;
-  std::string str = "cos2";
-  int er = calc.validator(str);
-  if (!er) er = calc.parcer(str);
-  if (!er) er = calc.to_reverse_polish_notation();
-  if (!er) er = calc.calculation("2.0");
-  if (er) {
-    printf("Error\n");
-  } else {
-    while (!calc.input_.empty()) {
-      std::cout << calc.input_.top().value << " ";
-      calc.input_.pop();
-    }
-    std::cout << std::endl;
-
-    while (!calc.output_.empty()) {
-      std::cout << calc.output_.top().value << " ";
-      calc.output_.pop();
-    }
-    std::cout << std::endl;
-
-    if (!calc.numbers_.empty())
-      std::cout << calc.numbers_.top().value << std::endl;
-  }
-  return 0;
-}

@@ -26,7 +26,6 @@ void Calculator::open_bracket_case() {
       error = EXIT_FAILURE;
     }
   } else {
-    // push_stack(input->value, input->priority, input->value_type, support);
     support_.push(
         {input_.top().value, input_.top().priority, input_.top().value_type});
   }
@@ -41,12 +40,9 @@ void Calculator::close_bracket_case() {
   } else {
     while (!support_.empty() && support_.top().value != O_BRACKET) {
       Lexem sup = support_.top();
-      // push_stack(p->value, p->priority, p->value_type, output);
-      // pop_stack(support);
       output_.push({sup.value, sup.priority, sup.value_type});
       support_.pop();
     }
-    // pop_stack(support);
     if (!support_.empty()) support_.pop();
   }
 }
@@ -67,14 +63,11 @@ void Calculator::operators_case(int *check_negative_func) {
   }
   while (!*check_negative_func && !support_.empty() &&
          support_.top().priority >= input_.top().priority) {
-    // push_stack(p->value, p->priority, p->value_type, output);
-    // pop_stack(support);
     output_.push({support_.top().value, support_.top().priority,
                   support_.top().value_type});
     support_.pop();
   }
   if (!error) {
-    // push_stack(input->value, input->priority, input->value_type, support);
     support_.push(
         {input_.top().value, input_.top().priority, input_.top().value_type});
   }
@@ -92,7 +85,6 @@ int Calculator::to_reverse_polish_notation() {
     type_t val = el.value_type;
 
     if (val == NUMBER || val == NUM_X || val == NUM_NAN || val == NUM_INF) {
-      // push_stack(input->value, input->priority, input->value_type, output);
       output_.push({el.value, el.priority, val});
       check_negative_func = 0;
     } else if (val == O_BRACKET) {
@@ -103,41 +95,15 @@ int Calculator::to_reverse_polish_notation() {
     } else {
       operators_case(&check_negative_func);
     }
-    // input = input->next;
     input_.pop();
   }
   while (!support_.empty() && !error) {
-    // push_stack(p->value, p->priority, p->value_type, output);
-    // pop_stack(&support);
     output_.push({support_.top().value, support_.top().priority,
                   support_.top().value_type});
     support_.pop();
   }
   reverse_stack(output_);
-  // if (support) destroy_stack(support);
   return error;
 }
 
 }  // namespace s21
-
-// int main(void) {
-//   s21::Calculator calc;
-//   std::string str = "3+2";
-//   int er = calc.parcer(str);
-//   if (!er) er = calc.to_reverse_polish_notation();
-//   if (er) {
-//     printf("Error\n");
-//   } else {
-//     while (!calc.input_.empty()) {
-//       std::cout << calc.input_.top().value << " ";
-//       calc.input_.pop();
-//     }
-//     std::cout << std::endl;
-
-//     while (!calc.output_.empty()) {
-//       std::cout << calc.output_.top().value << std::endl;
-//       calc.output_.pop();
-//     }
-//   }
-//   return 0;
-// }
