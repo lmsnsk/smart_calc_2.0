@@ -57,8 +57,6 @@ void Calculator::plus_minus(std::string str, int i, int is_minus) {
     input_.push({0.0, 5, (is_minus ? U_MINUS : U_PLUS)});
 }
 
-// input_.push({0.0, 3, LN});
-
 void Calculator::parser_switch(std::string str, int* i) {
   switch (str[*i]) {
     case '(':

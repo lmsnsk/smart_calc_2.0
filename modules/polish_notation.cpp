@@ -3,28 +3,28 @@
 namespace s21 {
 
 bool Calculator::is_func(int val) {
+  bool res = false;
   if (val == COS || val == SIN || val == TAN || val == ACOS || val == ASIN ||
       val == ATAN || val == SQRT || val == LOG || val == LN)
-    return true;
-  return false;
+    res = true;
+  return res;
 }
 
 bool Calculator::is_binar_operator(int val) {
+  bool res = false;
   if (val == PLUS || val == MINUS || val == MUL || val == SUB || val == MOD ||
       val == EXP)
-    return true;
-  return false;
+    res = true;
+  return res;
 }
 
 void Calculator::open_bracket_case() {
   std::stack<Lexem> tmp = input_;
   tmp.pop();
-  if (!tmp.empty()) {
-    type_t val = tmp.top().value_type;
-    if ((val == MUL || val == SUB || val == EXP || val == MOD ||
-         val == C_BRACKET)) {
-      error = EXIT_FAILURE;
-    }
+  type_t val = tmp.top().value_type;
+  if (!tmp.empty() && (val == MUL || val == SUB || val == EXP || val == MOD ||
+                       val == C_BRACKET)) {
+    error = EXIT_FAILURE;
   } else {
     support_.push(
         {input_.top().value, input_.top().priority, input_.top().value_type});
@@ -34,9 +34,9 @@ void Calculator::open_bracket_case() {
 void Calculator::close_bracket_case() {
   std::stack<Lexem> tmp = input_;
   tmp.pop();
-  if (!tmp.empty()) {
-    if (is_func(tmp.top().value_type) || tmp.top().value_type == NUMBER)
-      error = EXIT_FAILURE;
+  if (!tmp.empty() &&
+      (is_func(tmp.top().value_type) || tmp.top().value_type == NUMBER)) {
+    error = EXIT_FAILURE;
   } else {
     while (!support_.empty() && support_.top().value != O_BRACKET) {
       Lexem sup = support_.top();
@@ -82,15 +82,15 @@ int Calculator::to_reverse_polish_notation() {
 
   while (!input_.empty()) {
     Lexem el = input_.top();
-    type_t val = el.value_type;
+    type_t type = el.value_type;
 
-    if (val == NUMBER || val == NUM_X || val == NUM_NAN || val == NUM_INF) {
-      output_.push({el.value, el.priority, val});
+    if (type == NUMBER || type == NUM_X || type == NUM_NAN || type == NUM_INF) {
+      output_.push({el.value, el.priority, type});
       check_negative_func = 0;
-    } else if (val == O_BRACKET) {
+    } else if (type == O_BRACKET) {
       open_bracket_case();
       check_negative_func = 0;
-    } else if (val == C_BRACKET) {
+    } else if (type == C_BRACKET) {
       close_bracket_case();
     } else {
       operators_case(&check_negative_func);

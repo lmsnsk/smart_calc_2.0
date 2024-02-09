@@ -3,13 +3,15 @@
 namespace s21 {
 
 bool Calculator::is_number(char c) {
-  if (isdigit(c) || c == '.' || c == ',' || c == 'x') return true;
-  return false;
+  int res = false;
+  if (isdigit(c) || c == '.' || c == ',' || c == 'x') res = true;
+  return res;
 }
 
 bool Calculator::is_arithmetic(char c) {
-  if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') return true;
-  return false;
+  int res = false;
+  if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') res = true;
+  return res;
 }
 
 int Calculator::delete_speces(std::string& str) {

@@ -12,18 +12,18 @@ TEST(smart_calc_test, test_empty_str) {
 }
 
 TEST(smart_calc_test, test_incorrect) {
-  s21::Calculator calc;
-  char str[][15] = {"ln",     "()",        "(2+2)8", ".+",        "art18",
-                    "5+lig7", "(*)",       "acos",   "acot20",    "sos8",
-                    "cis8",   "+",         ")",      "mod",       "99-",
-                    "cos()",  "cos*17",    "mod4",   "4v",        "3 4",
-                    " --- ",  "-*",        "*-",     "3 4 .5 5.", "(3 +)",
-                    " 4+++7", "3+.+3",     "((457)", "3 ())4",    "b.1",
-                    "3.i",    "2.4mod3.4", ""};
+  char str[][15] = {"2+++2", "ln",     "()",        "(2+2)8", ".+",
+                    "art18", "5+lig7", "(*)",       "acos",   "acot20",
+                    "sos8",  "cis8",   "+",         ")",      "mod",
+                    "99-",   "cos()",  "cos*17",    "mod4",   "4v",
+                    "3 4",   " --- ",  "-*",        "*-",     "3 4 .5 5.",
+                    "(3 +)", " 4+++7", "3+.+3",     "((457)", "3 ())4",
+                    "b.1",   "3.i",    "2.4mod3.4", ""};
   double result;
   int i = 0;
   char x[] = "3";
   while (str[i][0]) {
+    s21::Calculator calc;
     int er = calc.s21_smart_calc(str[i], &result, x);
     EXPECT_EQ(er, 1);
     i++;
